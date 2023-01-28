@@ -293,6 +293,11 @@ void parseArgument(char* arg) {
       setting_affineOptModeB = -1;  //-1: fix. >=0: optimize (with prior, if > 0).
       setting_minGradHistAdd = 3;
     }
+    if (option == 3) {
+      printf("PHOTOMETRIC MODE WITH CALIBRATION; FIXED AFFINE BRIGHTNESS!\n");
+      setting_affineOptModeA = -1;  //-1: fix. >=0: optimize (with prior, if > 0).
+      setting_affineOptModeB = -1;  //-1: fix. >=0: optimize (with prior, if > 0).
+    }
     return;
   }
 
