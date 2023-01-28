@@ -51,12 +51,12 @@ class EFPoint;
 
 #define SCALE_IDEPTH 1.0f  // scales internal value to idepth.
 #define SCALE_XI_ROT 1.0f
-#define SCALE_XI_TRANS 0.5f
-#define SCALE_F 50.0f
-#define SCALE_C 50.0f
+#define SCALE_XI_TRANS 1.0f
+#define SCALE_F 1.0f
+#define SCALE_C 1.0f
 #define SCALE_W 1.0f
-#define SCALE_A 10.0f
-#define SCALE_B 1000.0f
+#define SCALE_A 1.0f
+#define SCALE_B 1.0f
 
 #define SCALE_IDEPTH_INVERSE (1.0f / SCALE_IDEPTH)
 #define SCALE_XI_ROT_INVERSE (1.0f / SCALE_XI_ROT)
