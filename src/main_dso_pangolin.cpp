@@ -59,6 +59,7 @@ float playbackSpeed = 0;  // 0 for linearize (play as fast as possible, while se
                           // otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
+std::string seq_name = "";
 
 int mode = 0;
 
@@ -296,6 +297,12 @@ void parseArgument(char* arg) {
     return;
   }
 
+  if (1 == sscanf(arg, "seq_name=%s", buf)) {
+    seq_name = buf;
+    printf("using sequence %s!\n", seq_name.c_str());
+    return;
+  }
+
   printf("could not parse argument \"%s\"!!!!\n", arg);
 }
 
@@ -431,6 +438,7 @@ int main(int argc, char** argv) {
     gettimeofday(&tv_end, NULL);
 
     fullSystem->printResult("result.txt");
+    fullSystem->logKFData(seq_name + "_kf_data.txt");
 
     int numFramesProcessed = abs(idsToPlay[0] - idsToPlay.back());
     double numSecondsProcessed = fabs(reader->getTimestamp(idsToPlay[0]) - reader->getTimestamp(idsToPlay.back()));

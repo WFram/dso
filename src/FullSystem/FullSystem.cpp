@@ -240,6 +240,26 @@ void FullSystem::printResult(std::string file) {
   myfile.close();
 }
 
+void FullSystem::logKFData(const std::string& file) {
+  boost::unique_lock<boost::mutex> lock(mapMutex);
+  boost::unique_lock<boost::mutex> crlock(shellPoseMutex);
+
+  std::ofstream output_file;
+  output_file.open(file.c_str());
+  output_file << std::setprecision(15);
+
+  printf("LOGGING THE KF DATA");
+
+  for (auto& f : allKeyFramesHistory) {
+    /* If we understand it was marginalized instantly, it means not okay */
+    if (!f->poseValid or f->marginalizedAt == f->id) continue;
+
+    output_file << f->incoming_id << " " << f->aff_g2l.a << " " << f->aff_g2l.b << "\n";
+  }
+
+  output_file.close();
+}
+
 Vec4 FullSystem::trackNewCoarse(FrameHessian* fh) {
   assert(allFrameHistory.size() > 0);
   // set pose initialization.
@@ -476,10 +496,11 @@ void FullSystem::traceNewCoarse(FrameHessian* fh) {
     }
   }
   //	printf("ADD: TRACE: %'d points. %'d (%.0f%%) good. %'d (%.0f%%) skip. %'d (%.0f%%) badcond. %'d (%.0f%%) oob.
-  //%'d (%.0f%%) out. %'d (%.0f%%) uninit.\n", 			trace_total, 			trace_good, 100*trace_good/(float)trace_total, 			trace_skip,
-  //100*trace_skip/(float)trace_total, 			trace_badcondition, 100*trace_badcondition/(float)trace_total, 			trace_oob,
-  //100*trace_oob/(float)trace_total, 			trace_out, 100*trace_out/(float)trace_total, 			trace_uninitialized,
-  //100*trace_uninitialized/(float)trace_total);
+  //%'d (%.0f%%) out. %'d (%.0f%%) uninit.\n", 			trace_total, 			trace_good,
+  // 100*trace_good/(float)trace_total, 			trace_skip, 100*trace_skip/(float)trace_total,
+  // trace_badcondition, 100*trace_badcondition/(float)trace_total, 			trace_oob,
+  // 100*trace_oob/(float)trace_total, 			trace_out, 100*trace_out/(float)trace_total,
+  // trace_uninitialized, 100*trace_uninitialized/(float)trace_total);
 }
 
 void FullSystem::activatePointsMT_Reductor(std::vector<PointHessian*>* optimized,
@@ -584,7 +605,7 @@ void FullSystem::activatePointsMT() {
 
   //	printf("ACTIVATE: %d. (del %d, notReady %d, marg %d, good %d, marg-skip %d)\n",
   //			(int)toOptimize.size(), immature_deleted, immature_notReady, immature_needMarg, immature_want,
-  //immature_margskip);
+  // immature_margskip);
 
   std::vector<PointHessian*> optimized;
   optimized.resize(toOptimize.size());
