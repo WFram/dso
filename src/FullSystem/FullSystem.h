@@ -131,7 +131,9 @@ class FullSystem {
 
   void debugPlot(std::string name);
 
-  void logKFData(const std::string &file);
+  void logFrameData(const std::string& file);
+
+  void logKFData(const std::string& file);
 
   void printFrameLifetimes();
   // contains pointers to active frames

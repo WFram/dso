@@ -240,6 +240,21 @@ void FullSystem::printResult(std::string file) {
   myfile.close();
 }
 
+void FullSystem::logFrameData(const std::string& file) {
+  boost::unique_lock<boost::mutex> lock(trackMutex);
+  boost::unique_lock<boost::mutex> crlock(shellPoseMutex);
+
+  std::ofstream output_file;
+  output_file.open(file.c_str());
+  output_file << std::setprecision(15);
+
+  printf("LOGGING THE FRAME DATA \n");
+
+  for (auto& f : allFrameHistory) output_file << f->incoming_id << " " << f->aff_g2l.a << " " << f->aff_g2l.b << "\n";
+
+  output_file.close();
+}
+
 void FullSystem::logKFData(const std::string& file) {
   boost::unique_lock<boost::mutex> lock(mapMutex);
   boost::unique_lock<boost::mutex> crlock(shellPoseMutex);
@@ -248,14 +263,10 @@ void FullSystem::logKFData(const std::string& file) {
   output_file.open(file.c_str());
   output_file << std::setprecision(15);
 
-  printf("LOGGING THE KF DATA");
+  printf("LOGGING THE KF DATA \n");
 
-  for (auto& f : allKeyFramesHistory) {
-    /* If we understand it was marginalized instantly, it means not okay */
-    if (!f->poseValid or f->marginalizedAt == f->id) continue;
-
+  for (auto& f : allKeyFramesHistory)
     output_file << f->incoming_id << " " << f->aff_g2l.a << " " << f->aff_g2l.b << "\n";
-  }
 
   output_file.close();
 }

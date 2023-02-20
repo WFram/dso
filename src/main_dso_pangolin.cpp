@@ -438,6 +438,7 @@ int main(int argc, char** argv) {
     gettimeofday(&tv_end, NULL);
 
     fullSystem->printResult("result.txt");
+    fullSystem->logFrameData(seq_name + "_frame_data.txt");
     fullSystem->logKFData(seq_name + "_kf_data.txt");
 
     int numFramesProcessed = abs(idsToPlay[0] - idsToPlay.back());
