@@ -6,6 +6,7 @@ SEQ="$1"
     gamma=$SEQ/pcalib.txt \
     mode=0 \
     nogui=0 \
+    nomt=1 \
     quiet=1 \
     start=0
     # start=0
