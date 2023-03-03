@@ -356,7 +356,11 @@ float FullSystem::optimize(int mnumOptIts) {
   double lambda = 1e-1;
   float stepsize = 1;
   VecX previousX = VecX::Constant(CPARS + 8 * frameHessians.size(), NAN);
+  const bool debug_lm = false;
+  if (debug_lm) std::cout << "START: LM" << std::endl;
+  int number_of_iterations = 0;
   for (int iteration = 0; iteration < mnumOptIts; iteration++) {
+    number_of_iterations++;
     // solve!
     backupState(iteration != 0);
     // solveSystemNew(0);
@@ -413,6 +417,11 @@ float FullSystem::optimize(int mnumOptIts) {
     }
 
     if (canbreak && iteration >= setting_minOptIterations) break;
+  }
+  if (debug_lm) {
+    std::cout << "\tEnergy: " << lastEnergy << std::endl;
+    std::cout << "\tNumber of iterations: " << number_of_iterations << std::endl;
+    std::cout << "FINISH: LM" << std::endl << std::endl;
   }
 
   Vec10 newStateZero = Vec10::Zero();
